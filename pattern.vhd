@@ -1,6 +1,7 @@
 LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
-USE IEEE.NUMERIC_STD.ALL;
+USE IEEE.STD_LOGIC_SIGNED.ALL;
+USE IEEE.NUMERIC_STD_UNSIGNED.ALL;
 
 ENTITY pattern IS
     PORT(clk, en : IN STD_LOGIC;
@@ -10,20 +11,20 @@ END ENTITY;
 
 ARCHITECTURE behavior OF pattern IS
 
-SIGNAL ix : UNSIGNED (12 DOWNTO 0);
-SIGNAL iy : UNSIGNED (12 DOWNTO 0);
+SIGNAL ix : STD_LOGIC_VECTOR (12 DOWNTO 0);
+SIGNAL iy : STD_LOGIC_VECTOR (12 DOWNTO 0);
 
 CONSTANT cx : SIGNED (12 DOWNTO 0) := TO_SIGNED(130, 13);
 CONSTANT cy : SIGNED (12 DOWNTO 0) := TO_SIGNED(96, 13);
 
-SIGNAL xgrid : UNSIGNED (16 DOWNTO 0);
-SIGNAL ygrid : UNSIGNED (16 DOWNTO 0);
-SIGNAL circle : UNSIGNED (16 DOWNTO 0);
+SIGNAL xgrid : STD_LOGIC_VECTOR (16 DOWNTO 0);
+SIGNAL ygrid : STD_LOGIC_VECTOR (16 DOWNTO 0);
+SIGNAL circle : STD_LOGIC_VECTOR (16 DOWNTO 0);
 SIGNAL grid : INTEGER;
-SIGNAL xcell : UNSIGNED (12 DOWNTO 0);
-SIGNAL ycell : UNSIGNED (12 DOWNTO 0);
-SIGNAL block5 : UNSIGNED (12 DOWNTO 0);
-SIGNAL block10 : UNSIGNED (12 DOWNTO 0);
+SIGNAL xcell : STD_LOGIC_VECTOR (12 DOWNTO 0);
+SIGNAL ycell : STD_LOGIC_VECTOR (12 DOWNTO 0);
+SIGNAL block5 : STD_LOGIC_VECTOR (12 DOWNTO 0);
+SIGNAL block10 : STD_LOGIC_VECTOR (12 DOWNTO 0);
 SIGNAL outer : STD_LOGIC;
 SIGNAL yellow: STD_LOGIC;
 SIGNAL red : STD_LOGIC;
@@ -39,11 +40,11 @@ BEGIN
         BEGIN
             IF RISING_EDGE(clk) THEN
                 IF en = '1' THEN
-                    ix <= UNSIGNED(STD_LOGIC_VECTOR(x)) * 2/5;
-                    iy <= UNSIGNED(STD_LOGIC_VECTOR(y)) * 2/5;
+                    ix <= x * 2/5;
+                    iy <= y * 2/5;
                     xgrid <= "0" & ix + 1;
                     ygrid <= "0" & iy + 8;
-                    circle <= ("0" & ix - UNSIGNED(STD_LOGIC_VECTOR(cx))) * ("0" & ix - UNSIGNED(STD_LOGIC_VECTOR(cx))) + ("0" & iy - UNSIGNED(STD_LOGIC_VECTOR(cy))) * ("0" & iy - UNSIGNED(STD_LOGIC_VECTOR(cy)));
+                    circle <= ("0" & ix - cx) * ("0" & ix - cx) + ("0" & iy - cy) * ("0" & iy - cy);
                     xcell <= (ix - 52) * 2/13;
                     ycell <= (iy - 32) / 13;
                     block10 <= (ix - 52) * 2/31;

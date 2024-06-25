@@ -48,18 +48,18 @@ BEGIN
                     ycell <= (iy - 32) / 13;
                     block10 <= (ix - 52) * 2/31;
                     block5 <= (ix - 52) / 31;
-                    outer <= ix < 52 OR ix > 206 OR iy < 32 OR iy > 160;
+                    outer <= '1' WHEN ix < 52 OR ix > 206 OR iy < 32 OR iy > 160 ELSE '0';
 
-                    yellow <= ix > 160 AND ix < 202 AND ycell = 6;
-                    red <= ycell = 8 AND xcell <= 5 OR (xcell >= 6 AND xcell <= 10 AND (ix XOR iy) MOD 2 = 2);
-                    blue <= ycell = 9 AND xcell <= 5 OR (xcell >= 6 AND xcell <= 10 AND (ix XOR iy) MOD 2 = 2);
-                    spike <= ix > 126 AND iy > 122 AND (ix * 4 + iy < 645);
+                    yellow <= '1' WHEN ix > 160 AND ix < 202 AND ycell = 6 ELSE '0';
+                    red <= '1' WHEN ycell = 8 AND xcell <= 5 OR (xcell >= 6 AND xcell <= 10 AND (ix XOR iy) MOD 2 = 2) ELSE '0';
+                    blue <= '1' WHEN ycell = 9 AND xcell <= 5 OR (xcell >= 6 AND xcell <= 10 AND (ix XOR iy) MOD 2 = 2) ELSE '0';
+                    spike <= '1' WHEN ix > 126 AND iy > 122 AND (ix * 4 + iy < 645) ELSE '0';
                 END IF;
             END IF;
             
-            r <= en AND NOT spike AND ((grid OR (NOT outer AND ycell < 3 AND (xcell < 6 OR (xcell >= 12 AND xcell <= 17)))) OR yellow OR red);
-            g <= en AND NOT spike AND ((grid OR (NOT outer AND ycell < 3 AND xcell < 12)) OR yellow);
-            b <= en AND NOT spike AND ((grid OR (NOT outer AND ycell < 3 AND xcell MOD 6 < 3)) OR blue);
+            r <= '1' WHEN en AND NOT spike AND ((grid OR (NOT outer AND ycell < 3 AND (xcell < 6 OR (xcell >= 12 AND xcell <= 17)))) OR yellow OR red) ELSE '0';
+            g <= '1' WHEN en AND NOT spike AND ((grid OR (NOT outer AND ycell < 3 AND xcell < 12)) OR yellow) ELSE '0';
+            b <= '1' WHEN en AND NOT spike AND ((grid OR (NOT outer AND ycell < 3 AND xcell MOD 6 < 3)) OR blue) ELSE '0';
 
             rgb <= r & g & b;
     END PROCESS;

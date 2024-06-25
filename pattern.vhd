@@ -48,18 +48,18 @@ BEGIN
                     ycell <= (iy - 32) / 13;
                     block10 <= (ix - 52) * 2/31;
                     block5 <= (ix - 52) / 31;
-                    outer <= '1' WHEN ix < 52 OR ix > 206 OR iy < 32 OR iy > 160 ELSE '0';
+                    outer <= '1' WHEN ix < d"52" OR ix > d"206" OR iy < d"32" OR iy > d"160" ELSE '0';
 
-                    yellow <= '1' WHEN ix > 160 AND ix < 202 AND ycell = 6 ELSE '0';
-                    red <= '1' WHEN ycell = 8 AND xcell <= 5 OR (xcell >= 6 AND xcell <= 10 AND (ix XOR iy) MOD 2 = 2) ELSE '0';
-                    blue <= '1' WHEN ycell = 9 AND xcell <= 5 OR (xcell >= 6 AND xcell <= 10 AND (ix XOR iy) MOD 2 = 2) ELSE '0';
-                    spike <= '1' WHEN ix > 126 AND iy > 122 AND (ix * 4 + iy < 645) ELSE '0';
+                    yellow <= '1' WHEN ix > d"160" AND ix < d"202" AND ycell = d"6" ELSE '0';
+                    red <= '1' WHEN ycell = d"8" AND xcell <= d"5" OR (xcell >= d"6" AND xcell <= d"10" AND (ix XOR iy) MOD 2 = d"2") ELSE '0';
+                    blue <= '1' WHEN ycell = d"9" AND xcell <= d"5" OR (xcell >= d"6" AND xcell <= d"10" AND (ix XOR iy) MOD 2 = d"2") ELSE '0';
+                    spike <= '1' WHEN ix > d"126" AND iy > d"122" AND (ix * 4 + iy < d"645") ELSE '0';
                 END IF;
             END IF;
             
-            r <= '1' WHEN en AND NOT spike AND ((grid OR (NOT outer AND ycell < 3 AND (xcell < 6 OR (xcell >= 12 AND xcell <= 17)))) OR yellow OR red) ELSE '0';
-            g <= '1' WHEN en AND NOT spike AND ((grid OR (NOT outer AND ycell < 3 AND xcell < 12)) OR yellow) ELSE '0';
-            b <= '1' WHEN en AND NOT spike AND ((grid OR (NOT outer AND ycell < 3 AND xcell MOD 6 < 3)) OR blue) ELSE '0';
+            r <= "00000001" WHEN en AND NOT spike AND ((grid OR (NOT outer AND ycell < 3 AND (xcell < 6 OR (xcell >= 12 AND xcell <= 17)))) OR yellow OR red) ELSE (OTHERS => '0');
+            g <= "00000001" WHEN en AND NOT spike AND ((grid OR (NOT outer AND ycell < 3 AND xcell < 12)) OR yellow) ELSE (OTHERS => '0');
+            b <= "00000001" WHEN en AND NOT spike AND ((grid OR (NOT outer AND ycell < 3 AND xcell MOD 6 < 3)) OR blue) ELSE (OTHERS => '0');
 
             rgb <= r & g & b;
     END PROCESS;
